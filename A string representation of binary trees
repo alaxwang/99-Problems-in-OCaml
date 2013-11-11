@@ -1,0 +1,14 @@
+type 'a binary_tree =
+    | Empty
+    | Node of 'a * 'a binary_tree * 'a binary_tree;;
+
+let tree = Node ("a", Node("b", Node("d", Empty, Empty),
+			        Node("e", Empty, Empty)), 
+		      Node("c", Empty, Node("f", Node("g", Empty, Empty), Empty)));;
+
+let rec tree_string = function 
+    | Empty -> ""
+    | Node(s, Empty, Empty) -> s;
+    | Node(s, l, r) -> String.concat "" [s;"(";tree_string l;",";tree_string r;")"];;
+
+tree_string tree;;
