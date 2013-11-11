@@ -1,0 +1,39 @@
+#load "unix.cma";;
+open Unix;;
+ let timeit f a b =
+    let t0 = Unix.gettimeofday() in
+    ignore(f a b);
+    let t1 = Unix.gettimeofday() in
+    t1 -. t0;;
+
+type 'a binary_tree =
+    | Empty
+    | Node of 'a * 'a binary_tree * 'a binary_tree;;
+
+let pre_in_tree preorder inorder =
+   let rec findLeftRight ch l flag = function
+       | [] -> [ List.rev l]
+       | h::t -> if h = ch && flag == false then (List.rev l) :: (findLeftRight ch [] true t)
+                   else findLeftRight ch (h::l) flag t in
+   
+   let rec range num l r = function
+       | [] -> []
+       | h::t -> if num >= l && num < (l + r) then h::(range (num+1) l r t)  else range (num+1) l r t in
+
+   let rec to_list pos str =
+       if pos >= String.length str then []
+       else str.[pos] :: to_list (pos + 1) str in
+
+   let rec generate pre ino =
+       if (List.length pre) == 1 then  Node((List.hd pre), Empty, Empty)
+       else if (List.length pre) == 0 then Empty
+       else let l = findLeftRight (List.hd pre) [] false ino in
+            let len = List.map List.length l in 
+	    let left = range 0 1 (List.hd len) pre in
+	    let right = range 0 ((List.hd len) + 1) (List.hd (List.tl len)) pre in
+	    Node((List.hd pre), generate left (List.hd l), generate right (List.hd (List.tl l)))
+    in
+    generate (to_list 0 preorder) (to_list 0 inorder);;
+
+pre_in_tree "aba" "baa";;
+timeit pre_in_tree "abdecfg" "dbeacgf";;
