@@ -1,0 +1,34 @@
+type 'a pos_binary_tree =
+    | E (* represents the empty tree *)
+    | N of 'a * int * int * 'a pos_binary_tree * 'a pos_binary_tree;;
+
+type 'a binary_tree =
+    | Empty
+    | Node of 'a * 'a binary_tree * 'a binary_tree;;
+
+let n_tree = Node ("n", Node("k", Node("c", Node("a", Empty, Empty),
+			                    Node("e", Node("d", Empty, Empty), Node("g", Empty, Empty))),
+		                  Node("m", Empty, Empty)), 
+		        Node("u", Node("p", Empty, Node("q", Empty, Empty)), 
+		                  Empty));;
+
+
+let max x y = 
+   if x > y then x else y;;
+
+let rec height = function 
+    | Empty -> 0
+    | Node(v, l, r) -> (1 + (max (height l) (height r)));;
+
+let rec pow x y =
+    if y <= 0 then 1 else x * (pow x (y -1));;
+
+let layout_binary_tree_two t = 
+    let h = (height t) in
+    let rec generate x y = function 
+       | Empty -> E
+       | Node(v, l, r) -> let cnt = (pow 2 (h - y - 1)) in
+                          N(v, x, y, generate (x - cnt) (y+1) l, generate (x + cnt) (y+1) r) in
+    generate ((pow 2 (h - 1)) - 1) 1 t;;
+
+layout_binary_tree_two n_tree;;
