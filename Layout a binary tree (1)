@@ -1,0 +1,27 @@
+type 'a pos_binary_tree =
+    | E (* represents the empty tree *)
+    | N of 'a * int * int * 'a pos_binary_tree * 'a pos_binary_tree;;
+
+type 'a binary_tree =
+    | Empty
+    | Node of 'a * 'a binary_tree * 'a binary_tree;;
+
+let tree = Node ("n", Node("k", 
+                           Node("c", Node("a", Empty, Empty),
+			             Node("h", Node("g", Node("e", Empty, Empty), Empty), Empty)),
+		           Node("m", Empty, Empty)), 
+		      Node("u", Node("p", Empty, 
+				          Node("s", Node("q", Empty, Empty), Empty)), 
+		                Empty));;
+
+let rec count = function 
+    | Empty -> 0
+    | Node(v, l, r) -> (1 + (count l) + (count r));;
+
+
+let layout_binary_tree t =
+    let rec generate x y = function 
+       | Empty -> E
+       | Node(v, l, r) -> let l_cnt = count l in
+                          N(v, x + l_cnt + 1, y, generate x (y+1) l, generate (x + l_cnt + 1) (y+1) r) in
+    generate 0 1 t;;
