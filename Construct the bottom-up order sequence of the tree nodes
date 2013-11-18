@@ -1,0 +1,9 @@
+type 'a mult_tree = T of 'a * 'a mult_tree list;;
+
+let t =
+    T('a', [T('f',[T('g',[])]); T('c',[]); T('b',[T('d',[]); T('e',[])])]);;
+
+let rec prepend_bottom_up (T(c, sub)) l =
+    List.fold_left (fun l s -> prepend_bottom_up s l) (c::l) sub;;
+
+let bottom_up t = prepend_bottom_up t [];;
