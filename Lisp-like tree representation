@@ -1,0 +1,11 @@
+type 'a mult_tree = T of 'a * 'a mult_tree list;;
+
+let t =
+    T('a', [T('f',[T('g',[])]); T('c',[]); T('b',[T('d',[]); T('e',[])])]);;
+
+let rec lisp (T(c, sub)) = 
+    let sstr = List.fold_left (fun l r -> (lispy r) @ l) [] (List.rev sub) in
+    if (List.length sstr) > 0 then ("("::((Char.escaped c)::sstr)) @ [")"]
+    else [(Char.escaped c)]
+;;
+let lispy tree = String.concat " " (lisp tree);;
