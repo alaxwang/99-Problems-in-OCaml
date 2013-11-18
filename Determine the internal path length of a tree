@@ -1,0 +1,10 @@
+type 'a mult_tree = T of 'a * 'a mult_tree list;;
+
+let t =
+    T('a', [T('f',[T('g',[])]); T('c',[]); T('b',[T('d',[]); T('e',[])])]);;
+
+let rec ipl tree len = 
+   match tree with
+    | T(_, sub) -> List.fold_left (fun s t -> s + (ipl t (len + 1))) len sub;;
+
+ipl t 0;;
